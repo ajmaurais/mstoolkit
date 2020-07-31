@@ -8,7 +8,7 @@
 C = gcc
 CC = g++
 CFLAGS = -O3 -static -I. -I./include -D_LARGEFILE_SOURCE -D_FILE_OFFSET_BITS=64 -DGCC -DHAVE_EXPAT_CONFIG_H
-SFLAGS = -O3 -shared -fPIC -g -I. -I./include -D_LARGEFILE_SOURCE -D_FILE_OFFSET_BITS=64 -DGCC -DHAVE_EXPAT_CONFIG_H
+SFLAGS = -O3 -shared -fPIC -g -L/Users/Aaron/local/mstoolkit/obj -lz -lexpat -I. -I./include -D_LARGEFILE_SOURCE -D_FILE_OFFSET_BITS=64 -DGCC -DHAVE_EXPAT_CONFIG_H
 LITEFLAGS = -D_NOSQLITE
 
 SOVER = 83
@@ -169,7 +169,7 @@ MZPARSER_DSO = $(patsubst ${MZPARSER_SRCDIR}%.cpp, ${MZPARSER_DSTDIR}%.lo, $(MZP
 
 mzparser : $(MZPARSER_DST) $(MZPARSER_DSO)
 	ar rcs $(BUILD_DIR)/libmzparser.a $(MZPARSER_DST)
-	$(CC) $(SFLAGS) -o $(BUILD_DIR)/libmzparser.so.$(RELVER) -Wl,-z,relro -Wl,-soname,libmzparser.so.$(SOVER) $(MZPARSER_DSO)
+	$(CC) $(SFLAGS) -o $(BUILD_DIR)/libmzparser.so.$(RELVER) -Wl,-install_name,libmzparser.so.$(SOVER) $(MZPARSER_DSO)
 	ln -sf $(BUILD_DIR)/libmzparser.so.$(RELVER) $(BUILD_DIR)/libmzparser.so.$(SOVER)
 	ln -sf $(BUILD_DIR)/libmzparser.so.$(SOVER) $(BUILD_DIR)/libmzparser.so
 	
@@ -263,10 +263,10 @@ sqlite-realclean : sqlite-clean
 lib : expat zlib mstoolkit mzparser mzimltools sqlite
 	ar -M <mstoolkit.mri
 	ar -M <mstoolkitlite.mri
-	$(CC) $(SFLAGS) -o libmstoolkit.so.$(RELVER) -Wl,-z,relro -Wl,-soname,libmstoolkit.so.$(SOVER) $(MSTOOLKIT_DSO) $(MZPARSER_DSO) $(MZIMLTOOLS_DSO) $(EXPAT_DSO) $(ZLIB_DSO) $(SQLITE_DSO) 
+	$(CC) $(SFLAGS) -o libmstoolkit.so.$(RELVER) -Wl,-install_name,libmstoolkit.so.$(SOVER) $(MSTOOLKIT_DSO) $(MZPARSER_DSO) $(MZIMLTOOLS_DSO) $(EXPAT_DSO) $(ZLIB_DSO) $(SQLITE_DSO) 
 	ln -sf libmstoolkit.so.$(RELVER) libmstoolkit.so.$(SOVER)
 	ln -sf libmstoolkit.so.$(SOVER) libmstoolkit.so
-	$(CC) $(SFLAGS) -o libmstoolkitlite.so.$(RELVER) -Wl,-z,relro -Wl,-soname,libmstoolkitlite.so.$(SOVER) $(MSTOOLKIT_DSO) $(MZPARSER_DSO) $(MZIMLTOOLS_DSO) $(EXPAT_DSO) $(ZLIB_DSO)
+	$(CC) $(SFLAGS) -o libmstoolkitlite.so.$(RELVER) -Wl,-install_name,libmstoolkitlite.so.$(SOVER) $(MSTOOLKIT_DSO) $(MZPARSER_DSO) $(MZIMLTOOLS_DSO) $(EXPAT_DSO) $(ZLIB_DSO)
 	ln -sf libmstoolkitlite.so.$(RELVER) libmstoolkitlite.so.$(SOVER)
 	ln -sf libmstoolkitlite.so.$(SOVER) libmstoolkitlite.so
 
