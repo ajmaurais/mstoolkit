@@ -2,6 +2,8 @@ include/expat_config.h
 
 obj/*
 .DS_store
+.idea/*
+lic/*
 
 # Prerequisites
 *.d

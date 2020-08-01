@@ -7,8 +7,8 @@
 
 C = gcc
 CC = g++
-CFLAGS = -O3 -static -I. -I./include -D_LARGEFILE_SOURCE -D_FILE_OFFSET_BITS=64 -DGCC -DHAVE_EXPAT_CONFIG_H
-SFLAGS = -O3 -shared -fPIC -g -L/Users/Aaron/local/mstoolkit/obj -lz -lexpat -I. -I./include -D_LARGEFILE_SOURCE -D_FILE_OFFSET_BITS=64 -DGCC -DHAVE_EXPAT_CONFIG_H
+CFLAGS = -O3 -I. -I./include -D_LARGEFILE_SOURCE -D_FILE_OFFSET_BITS=64 -DGCC -DHAVE_EXPAT_CONFIG_H
+SFLAGS = -O3 -shared -fPIC -g -L/Users/Aaron/local/mstoolkit/obj -lz -lexpat -lsqlite3 -I. -I./include -D_LARGEFILE_SOURCE -D_FILE_OFFSET_BITS=64 -DGCC -DHAVE_EXPAT_CONFIG_H
 LITEFLAGS = -D_NOSQLITE
 
 SOVER = 83
@@ -261,8 +261,10 @@ sqlite-realclean : sqlite-clean
 .PHONY : lib
 
 lib : expat zlib mstoolkit mzparser mzimltools sqlite
-	ar -M <mstoolkit.mri
-	ar -M <mstoolkitlite.mri
+	#ar -M <mstoolkit.mri
+	#ar -M <mstoolkitlite.mri
+	ar -rcT libmstoolkit.a obj/libexpat.a obj/libz.a obj/libmst.a obj/libmzparser.a obj/libmzimltools.a obj/libsqlite.a
+	ar -rcT libmstoolkitlite.a obj/libexpat.a obj/libz.a obj/libmstlite.a obj/libmzparser.a obj/libmzimltools.a	
 	$(CC) $(SFLAGS) -o libmstoolkit.so.$(RELVER) -Wl,-install_name,libmstoolkit.so.$(SOVER) $(MSTOOLKIT_DSO) $(MZPARSER_DSO) $(MZIMLTOOLS_DSO) $(EXPAT_DSO) $(ZLIB_DSO) $(SQLITE_DSO) 
 	ln -sf libmstoolkit.so.$(RELVER) libmstoolkit.so.$(SOVER)
 	ln -sf libmstoolkit.so.$(SOVER) libmstoolkit.so
