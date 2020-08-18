@@ -16,6 +16,7 @@ int mzParser::checkFileType(const char* fname){
   char file[256];
   char ext[256];
   char *tok;
+  char *saveptr;
   char preExt[256];
   unsigned int i;
 
@@ -27,11 +28,11 @@ int mzParser::checkFileType(const char* fname){
   strcpy(ext,"");
 
   strcpy(file,fname);
-  tok=strtok(file,".\n");
+  tok=strtok_r(file,".\n", &saveptr);
   while(tok!=NULL){
     strcpy(preExt,ext);
     strcpy(ext,tok);
-    tok=strtok(NULL,".\n");
+    tok=strtok_r(NULL,".\n", &saveptr);
   }
 
   for(i=0;i<strlen(ext);i++) ext[i]=toupper(ext[i]);
