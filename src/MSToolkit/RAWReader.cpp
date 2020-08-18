@@ -143,6 +143,7 @@ MSSpectrumType RAWReader::evaluateFilter(long scan, char* chFilter, vector<doubl
 	string mzVal;
 	int stop;
   bool bSA=false;
+    char* saveptr;
 
 	//For non-ATL and non-MFC conversions
 	int sl;
@@ -159,7 +160,7 @@ MSSpectrumType RAWReader::evaluateFilter(long scan, char* chFilter, vector<doubl
 	strcpy(cStr,chFilter);
 	MSSpectrumType mst=Unspecified;
 	char* tok;
-	tok=strtok(cStr," \n");
+	tok=strtok_r(cStr," \n", &saveptr);
 	while(tok!=NULL){
 
 		if(strcmp(tok,"c")==0){
@@ -221,7 +222,7 @@ MSSpectrumType RAWReader::evaluateFilter(long scan, char* chFilter, vector<doubl
 			cout << "Unknown token: " << tok << endl;
 		}
 
-		tok=strtok(NULL," \n");
+		tok=strtok_r(NULL," \n", &saveptr);
 	}
 
 	return mst;
