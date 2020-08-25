@@ -1,7 +1,12 @@
 
 add_library(zlib INTERFACE)
 set(ZLIB_VERSION "1.2.11")
-find_package(zlib ${ZLIB_VERSION})
+
+if(BUILD_ZLIB)
+	set(ZLIB_FOUND FALSE)
+else()
+	find_package(expat ${ZLIB_VERSION})
+endif()
 
 if(NOT ZLIB_FOUND)
 	include(ExternalProject)

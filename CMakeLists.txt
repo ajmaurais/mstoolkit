@@ -2,13 +2,19 @@ cmake_minimum_required(VERSION 3.16)
 project(mstoolkit)
 
 set(CMAKE_CXX_STANDARD 11)
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -D_NOSQLITE -D_LARGEFILE_SOURCE -D_FILE_OFFSET_BITS=64 -DGCC -DHAVE_EXPAT_CONFIG_H")
+add_compile_definitions(_NOSQLITE _LARGEFILE_SOURCE _FILE_OFFSET_BITS=64 GCC HAVE_EXPAT_CONFIG_H)
 set(LIBRARY_OUTPUT_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/lib)
 # set(MSTOOLKIT_STATIC_LIBS "z expat mzparser mzimltools mstoolkit")
 
+option(BUILD_EXPAT "Build expat from source even it is already installed?" OFF)
+option(BUILD_ZLIB "Build zlib from source even it is already installed?" OFF)
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}/thirdparty")
-include(zlib)
-include(expat)
+if(NOT DEFINED ZLIB_LIBRARY OR NOT DEFINED ZLIB_INCLUDE_DIR)
+	include(zlib)
+endif()
+if(NOT DEFINED EXPAT_LIBRARY OR NOT DEFINED EXPAT_INCLUDE_DIR)
+	include(expat)
+endif()
 
 include_directories(include ${CMAKE_CURRENT_BINARY_DIR}/include)
 
@@ -36,6 +42,7 @@ add_library(mstoolkit STATIC ${MSPARSER_SRC} ${MSTOOLKIT_SRC} ${MZIMLTOOLS_SRC})
 target_link_libraries(mstoolkit zlib expat)
 
 add_executable(MSSingleScan "MSSingleScanSrc/MSSingleScan.cpp")
-# target_link_libraries(MSSingleScan z expat mzparser mzimltools mstoolkit)
 target_link_libraries(MSSingleScan mstoolkit)
+
 install(TARGETS mstoolkit DESTINATION lib)
+

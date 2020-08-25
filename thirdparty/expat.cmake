@@ -1,9 +1,14 @@
 
 add_library(expat INTERFACE)
 set(EXPAT_VERSION "2.2.9")
-find_package(expat ${EXPAT_VERSION})
 
-if(NOT EXPAT_FOUND)
+if(BUILD_EXPAT)
+	set(EXPAT_FOUND FALSE)
+else()
+find_package(expat ${EXPAT_VERSION})
+endif()
+
+if(NOT EXPAT_FOUND OR BUILD_EXPAT)
 	include(ExternalProject)
 	include(GNUInstallDirs)
 
